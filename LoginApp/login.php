@@ -1,4 +1,8 @@
 <?php
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 // Tell the browser this response is JSON format
 // JSON is just text structured as key-value pairs
@@ -67,6 +71,10 @@ if (strlen($password) < 6) {
 // In a real app these would come from a database
 $valid_username = 'admin';
 $valid_password = 'password123';
+$valid_username = 'priest';
+$valid_password = 'holywater1999';
+$valid_username = 'Dr. Ajayi';
+$valid_password = 'takeover2024';
 
 // Check if the submitted credentials match
 if ($username === $valid_username && $password === $valid_password) {

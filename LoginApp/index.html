@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login — CSC426</title>
+  <title>Login</title>
   <style>
     /* ---- RESET & BASE ---- */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -97,44 +97,43 @@
     <div id='message'></div>
   </div>
 
-  <script>
-    // Hardcoded demo credentials
-    const VALID_USERNAME = 'admin';
-    const VALID_PASSWORD = 'password123';
-
-    function handleLogin() {
+ <script>
+    async function handleLogin() {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
-      let valid = true;
 
-      // Reset previous errors
       document.getElementById('usernameErr').style.display = 'none';
       document.getElementById('passwordErr').style.display = 'none';
+      document.getElementById('message').style.display = 'none';
 
-      // Validate username
+      let valid = true;
       if (!username) {
         document.getElementById('usernameErr').style.display = 'block';
         valid = false;
       }
-
-      // Validate password length
       if (password.length < 6) {
         document.getElementById('passwordErr').style.display = 'block';
         valid = false;
       }
-
       if (!valid) return;
 
-      // Check credentials
-      const msg = document.getElementById('message');
-      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-        msg.className = 'success';
-        msg.textContent = 'Login successful! Welcome, ' + username + '.';
-      } else {
+      try {
+        const response = await fetch('https://lognup.infinityfreeapp.com/login.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: username, password: password })
+        });
+        const result = await response.json();
+        const msg = document.getElementById('message');
+        msg.className = result.status;
+        msg.textContent = result.message;
+        msg.style.display = 'block';
+      } catch (err) {
+        const msg = document.getElementById('message');
         msg.className = 'error';
-        msg.textContent = 'Invalid username or password. Please try again.';
+        msg.textContent = 'Cannot reach server. Make sure XAMPP Apache is running.';
+        msg.style.display = 'block';
       }
-      msg.style.display = 'block';
     }
 
     function handleReset() {
