@@ -67,17 +67,16 @@ if (strlen($password) < 6) {
     exit;
 }
 
-// Hardcoded credentials for this assignment
-// In a real app these would come from a database
-$valid_username = 'admin';
-$valid_password = 'password123';
-$valid_username = 'priest';
-$valid_password = 'holywater1999';
-$valid_username = 'Dr. Ajayi';
-$valid_password = 'takeover2024';
+// Multiple users stored as an array
+// Each username maps to its password
+$users = [
+    'admin'    => 'password123',
+    'priest'   => 'holywater1999',
+    'Dr. Ajayi' => 'takeover2024',
+];
 
-// Check if the submitted credentials match
-if ($username === $valid_username && $password === $valid_password) {
+// Check if username exists and password matches
+if (isset($users[$username]) && $users[$username] === $password) {
     echo json_encode([
         'status'  => 'success',
         'message' => 'Login successful. Welcome, ' . htmlspecialchars($username) . '!'
